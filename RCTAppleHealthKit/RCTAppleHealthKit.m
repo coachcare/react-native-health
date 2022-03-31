@@ -713,6 +713,7 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
             @"HeartRateVariabilitySDNN",
             @"RestingHeartRate",
             @"Running",
+            @"OxygenSaturation",
             @"StairClimbing",
             @"StepCount",
             @"Swimming",
