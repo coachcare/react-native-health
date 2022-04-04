@@ -148,11 +148,24 @@ NSString * const kMetadataKey = @"metadata";
 
     @param type The human readable format
  */
+
 + (HKSampleType *)quantityTypeFromName:(NSString *)type {
     if ([type isEqual:@"ActiveEnergyBurned"]){
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
     } else if ([type isEqual:@"BasalEnergyBurned"]){
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBasalEnergyBurned];
+    } else if ([type isEqual:@"BodyMass"]){
+        return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass];
+    } else if ([type isEqual:@"BodyFatPercentage"]){
+        return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyFatPercentage];
+    } else if ([type isEqual:@"BodyTemperature"]){
+        return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyTemperature];
+    } else if ([type isEqual:@"BloodGlucose"]){
+        return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
+    } else if ([type isEqual:@"BloodPressureDiastolic"]){
+        return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic];
+    } else if ([type isEqual:@"BloodPressureSystolic"]){
+        return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
     } else if ([type isEqual:@"Cycling"]){
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceCycling];
     } else if ([type isEqual:@"HeartRate"]){
@@ -163,6 +176,8 @@ NSString * const kMetadataKey = @"metadata";
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierOxygenSaturation];
     } else if ([type isEqual:@"RestingHeartRate"]){
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierRestingHeartRate];
+    } else if ([type isEqual:@"RespiratoryRate"]){
+        return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierRespiratoryRate];
     } else if ([type isEqual:@"Running"]){
         return [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];
     } else if ([type isEqual:@"StairClimbing"]) {
