@@ -599,49 +599,24 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
 
 - (NSArray<NSString *> *)supportedEvents {
     NSArray *types = @[
-        @"ActiveEnergyBurned",
-        @"BasalEnergyBurned",
-        @"BodyMass",
-        @"BodyFatPercentage",
-        @"BodyTemperature",
-        @"BloodGlucose",
-        @"BloodPressureDiastolic",
-        @"BloodPressureSystolic",
-        @"Cycling",
-        @"HeartRate",
-        @"HeartRateVariabilitySDNN",
-        @"RestingHeartRate",
-        @"RespiratoryRate",
-        @"Running",
-        @"StairClimbing",
-        @"StepCount",
-        @"Swimming",
-        @"Vo2Max",
-        @"Walking",
-        @"Workout",
-        @"MindfulSession",
-        @"OxygenSaturation",
-        @"AllergyRecord",
-        @"ConditionRecord",
-        @"CoverageRecord",
-        @"ImmunizationRecord",
-        @"LabResultRecord",
-        @"MedicationRecord",
-        @"ProcedureRecord",
-        @"VitalSignRecord",
-        @"SleepAnalysis"
+        @"healthKit:new",
+        @"healthKit:failure",
+        @"healthKit:enabled",
+        @"healthKit:sample",
+        @"healthKit:setup:success",
+        @"healthKit:setup:failure"
     ];
     
-    NSArray *templates = @[@"healthKit:%@:new", @"healthKit:%@:failure", @"healthKit:%@:enabled", @"healthKit:%@:sample", @"healthKit:%@:setup:success", @"healthKit:%@:setup:failure"];
+    // NSArray *templates = @[@"healthKit:%@:new", @"healthKit:%@:failure", @"healthKit:%@:enabled", @"healthKit:%@:sample", @"healthKit:%@:setup:success", @"healthKit:%@:setup:failure"];
     
-    NSMutableArray *supportedEvents = [[NSMutableArray alloc] init];
+    // NSMutableArray *supportedEvents = [[NSMutableArray alloc] init];
 
-    for(NSString * type in types) {
-        for(NSString * template in templates) {
-            NSString *successEvent = [NSString stringWithFormat:template, type];
-            [supportedEvents addObject: successEvent];
-        }
-    }
+    // for(NSString * type in types) {
+    //     // for(NSString * template in templates) {
+    //         NSString *successEvent = [NSString stringWithFormat:template, type];
+    //         [supportedEvents addObject: successEvent];
+    //     // }
+    // }
     [supportedEvents addObject: @"change:steps"];
   return supportedEvents;
 }

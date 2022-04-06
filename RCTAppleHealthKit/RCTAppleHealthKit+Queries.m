@@ -855,7 +855,7 @@
                                                      NSError * _Nullable error) {
         NSLog(@"[HealthKit] New sample received from Apple HealthKit - %@", type);
 
-        NSString *successEvent = [NSString stringWithFormat:@"healthKit:%@:sample", type];
+        NSString *successEvent = [NSString stringWithFormat:@"healthKit:sample"];
 
         if (error) {
             completionHandler();
@@ -865,7 +865,7 @@
             return;
         }
 
-        [self sendEventWithName:successEvent body:@{}];
+        [self sendEventWithName:successEvent body:type];
 
         completionHandler();
 
@@ -876,7 +876,7 @@
     [self.healthStore enableBackgroundDeliveryForType:sampleType
                                             frequency:HKUpdateFrequencyImmediate
                                        withCompletion:^(BOOL success, NSError * _Nullable error) {
-        NSString *successEvent = [NSString stringWithFormat:@"healthKit:%@:enabled", type];
+        NSString *successEvent = [NSString stringWithFormat:@"healthKit:enabled"];
 
         if (error) {
             NSLog(@"[HealthKit] An error happened when setting up background observer - %@", error.localizedDescription);
@@ -886,7 +886,7 @@
 
         [self.healthStore executeQuery:query];
 
-        [self sendEventWithName:successEvent body:@{}];
+        [self sendEventWithName:successEvent body:type];
     }];
 }
 
@@ -911,20 +911,20 @@
                                                      NSError * _Nullable error) {
         NSLog(@"[HealthKit] New sample received from Apple HealthKit - %@", type);
 
-        NSString *successEvent = [NSString stringWithFormat:@"healthKit:%@:new", type];
-        NSString *failureEvent = [NSString stringWithFormat:@"healthKit:%@:failure", type];
+        NSString *successEvent = [NSString stringWithFormat:@"healthKit:new"];
+        NSString *failureEvent = [NSString stringWithFormat:@"healthKit:failure"];
 
         if (error) {
             completionHandler();
 
             NSLog(@"[HealthKit] An error happened when receiving a new sample - %@", error.localizedDescription);
             if(self.hasListeners) {
-                [self sendEventWithName:failureEvent body:@{}];
+                [self sendEventWithName:failureEvent body:type];
             }
             return;
         }
         if(self.hasListeners) {
-            [self sendEventWithName:successEvent body:@{}];
+            [self sendEventWithName:successEvent body:type];
         }
         completionHandler();
 
@@ -935,20 +935,20 @@
     [self.healthStore enableBackgroundDeliveryForType:sampleType
                                             frequency:HKUpdateFrequencyImmediate
                                        withCompletion:^(BOOL success, NSError * _Nullable error) {
-        NSString *successEvent = [NSString stringWithFormat:@"healthKit:%@:setup:success", type];
-        NSString *failureEvent = [NSString stringWithFormat:@"healthKit:%@:setup:failure", type];
+        NSString *successEvent = [NSString stringWithFormat:@"healthKit:setup:success"];
+        NSString *failureEvent = [NSString stringWithFormat:@"healthKit:setup:failure"];
 
         if (error) {
             NSLog(@"[HealthKit] An error happened when setting up background observer - %@", error.localizedDescription);
             if(self.hasListeners) {
-                [self sendEventWithName:failureEvent body:@{}];
+                [self sendEventWithName:failureEvent body:type];
             }
             return;
         }
 
         [self.healthStore executeQuery:query];
         if(self.hasListeners) {
-            [self sendEventWithName:successEvent body:@{}];
+            [self sendEventWithName:successEvent body:type];
         }
         }];
 }
