@@ -923,9 +923,9 @@
             }
             return;
         }
-        if(self.hasListeners) {
+        // if(self.hasListeners) {
             [self sendEventWithName:successEvent body:type];
-        }
+        // }
         completionHandler();
 
         NSLog(@"[HealthKit] New sample from Apple HealthKit processed - %@", type);

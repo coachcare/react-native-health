@@ -607,16 +607,12 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
         @"healthKit:setup:failure"
     ];
     
-    // NSArray *templates = @[@"healthKit:%@:new", @"healthKit:%@:failure", @"healthKit:%@:enabled", @"healthKit:%@:sample", @"healthKit:%@:setup:success", @"healthKit:%@:setup:failure"];
-    
-    // NSMutableArray *supportedEvents = [[NSMutableArray alloc] init];
+     NSMutableArray *supportedEvents = [[NSMutableArray alloc] init];
 
-    // for(NSString * type in types) {
-    //     // for(NSString * template in templates) {
-    //         NSString *successEvent = [NSString stringWithFormat:template, type];
-    //         [supportedEvents addObject: successEvent];
-    //     // }
-    // }
+     for(NSString * type in types) {
+        NSString *successEvent = [NSString stringWithFormat:@"%@", type];
+        [supportedEvents addObject: successEvent];
+     }
     [supportedEvents addObject: @"change:steps"];
   return supportedEvents;
 }
