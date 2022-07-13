@@ -865,7 +865,9 @@
             return;
         }
 
-        [self sendEventWithName:successEvent body:type];
+        if(self.hasListeners) {
+            [self emitEventWithName:successEvent body:type];
+        }
 
         completionHandler();
 
@@ -886,7 +888,7 @@
 
         [self.healthStore executeQuery:query];
 
-        [self sendEventWithName:successEvent body:type];
+        [self emitEventWithName:successEvent body:type];
     }];
 }
 
@@ -919,13 +921,13 @@
 
             NSLog(@"[HealthKit] An error happened when receiving a new sample - %@", error.localizedDescription);
             if(self.hasListeners) {
-                [self sendEventWithName:failureEvent body:type];
+                [self emitEventWithName:failureEvent body:type];
             }
             return;
         }
-        // if(self.hasListeners) {
-            [self sendEventWithName:successEvent body:type];
-        // }
+         if(self.hasListeners) {
+            [self emitEventWithName:successEvent body:type];
+         }
         completionHandler();
 
         NSLog(@"[HealthKit] New sample from Apple HealthKit processed - %@", type);
@@ -941,14 +943,15 @@
         if (error) {
             NSLog(@"[HealthKit] An error happened when setting up background observer - %@", error.localizedDescription);
             if(self.hasListeners) {
-                [self sendEventWithName:failureEvent body:type];
+                [self emitEventWithName:failureEvent body:type];
             }
             return;
         }
 
-        [self.healthStore executeQuery:query];
+        
         if(self.hasListeners) {
-            [self sendEventWithName:successEvent body:type];
+            [self.healthStore executeQuery:query];
+            [self emitEventWithName:successEvent body:type];
         }
         }];
 }
