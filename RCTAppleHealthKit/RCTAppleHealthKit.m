@@ -37,15 +37,27 @@ bool hasListeners;
 
 RCT_EXPORT_MODULE();
 
++ (id)allocWithZone:(NSZone *)zone {
+    static RCTAppleHealthKit *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [super allocWithZone:zone];
+    });
+    return sharedInstance;
+}
+
++ (RCTCallableJSModules *)sharedJsModule {
+    static RCTCallableJSModules *sharedJsModule = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedJsModule = [RCTCallableJSModules new];
+    });
+    return sharedJsModule;
+}
+
 - (id) init
 {
-    if (shared != nil) {
-        return shared;
-    }
-
-    self = [super init];
-    shared = self;
-    return self;
+    return [super init];
 }
 
 + (BOOL)requiresMainQueueSetup
@@ -600,11 +612,11 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
 - (NSArray<NSString *> *)supportedEvents {
     NSArray *types = @[
         @"healthKit:new",
-        @"healthKit:failure",
-        @"healthKit:enabled",
-        @"healthKit:sample",
-        @"healthKit:setup:success",
-        @"healthKit:setup:failure"
+//        @"healthKit:failure",
+//        @"healthKit:enabled",
+//        @"healthKit:sample",
+//        @"healthKit:setup:success",
+//        @"healthKit:setup:failure"
     ];
     
      NSMutableArray *supportedEvents = [[NSMutableArray alloc] init];
@@ -678,6 +690,7 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
 - (void)initializeBackgroundObservers:(RCTBridge *)bridge
 {
     NSLog(@"[HealthKit] Background observers will be added to the app");
+    NSLog(@"%@", hasListeners);
 
     [self _initializeHealthStore];
 
@@ -738,14 +751,50 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
 
 // Will be called when this module's first listener is added.
 -(void)startObserving {
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        for (NSString *notificationName in [self supportedEvents]) {
+//            NSLog(@"%@", notificationName);
+//            NSLog(@"%s", "notificationName");
+            [center addObserver:self
+                   selector:@selector(emitEventInternal:)
+                       name:notificationName
+                     object:nil];
+        }
     self.hasListeners = YES;
-    // Set up any upstream listeners or background tasks as necessary
+}
+
+- (void)emitEventInternal:(NSNotification *)notification {
+  if (self.hasListeners) {
+    self.callableJSModules = [RCTAppleHealthKit sharedJsModule];
+    [self.callableJSModules setBridge:self.bridge];
+      NSLog(@"%s", "name");
+      NSLog(@"%@", notification.name);
+     
+      NSLog(@"%s", "notificationName");
+      NSLog(@"%@", notification.userInfo);
+      [self sendEventWithName:@"healthKit:new" body:@{@"name": @"name"}];
+//    [self sendEventWithName:@"healthKit:new"
+//                   body:@"BloodGlucose"];
+  }
+}
+
+- (void)emitEventWithName:(NSString *)name body:(NSDictionary *)payload {
+    NSLog(@"%s", "j name");
+    NSLog(@"%@", name);
+//
+//    NSLog(@"%s", "payload");
+//    NSLog(@"%@", payload);
+//    NSDictionary* dict = @{@"name":payload};
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"healthKit:new"
+                                                    object:self
+                                                      userInfo:@{@"name": payload}];
 }
 
 // Will be called when this module's last listener is removed, or on dealloc.
 -(void)stopObserving {
     self.hasListeners = NO;
-    // Remove upstream listeners, stop unnecessary background tasks
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
