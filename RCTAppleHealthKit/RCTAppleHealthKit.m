@@ -682,7 +682,6 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
 - (void)initializeBackgroundObservers:(RCTBridge *)bridge
 {
     NSLog(@"[HealthKit] Background observers will be added to the app");
-    NSLog(@"%@", hasListeners);
 
     [self _initializeHealthStore];
 
@@ -745,8 +744,6 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
 -(void)startObserving {
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         for (NSString *notificationName in [self supportedEvents]) {
-//            NSLog(@"%@", notificationName);
-//            NSLog(@"%s", "notificationName");
             [center addObserver:self
                    selector:@selector(emitEventInternal:)
                        name:notificationName
