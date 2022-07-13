@@ -618,7 +618,7 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
        @"change:steps"
     ];
     
-  return supportedEvents;
+  return types;
 }
 
 - (void)getModuleInfo:(NSDictionary *)input callback:(RCTResponseSenderBlock)callback
