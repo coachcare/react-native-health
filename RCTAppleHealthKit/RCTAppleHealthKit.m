@@ -31,8 +31,6 @@ RCTAppleHealthKit *shared;
 
 @implementation RCTAppleHealthKit
 
-@synthesize bridge = _bridge;
-
 bool hasListeners;
 
 RCT_EXPORT_MODULE();
@@ -612,20 +610,14 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
 - (NSArray<NSString *> *)supportedEvents {
     NSArray *types = @[
         @"healthKit:new",
-//        @"healthKit:failure",
-//        @"healthKit:enabled",
-//        @"healthKit:sample",
-//        @"healthKit:setup:success",
-//        @"healthKit:setup:failure"
+       @"healthKit:failure",
+       @"healthKit:enabled",
+       @"healthKit:sample",
+       @"healthKit:setup:success",
+       @"healthKit:setup:failure",
+       @"change:steps"
     ];
     
-     NSMutableArray *supportedEvents = [[NSMutableArray alloc] init];
-
-     for(NSString * type in types) {
-        NSString *successEvent = [NSString stringWithFormat:@"%@", type];
-        [supportedEvents addObject: successEvent];
-     }
-    [supportedEvents addObject: @"change:steps"];
   return supportedEvents;
 }
 
@@ -767,29 +759,15 @@ RCT_EXPORT_METHOD(getClinicalRecords:(NSDictionary *)input callback:(RCTResponse
   if (self.hasListeners) {
     self.callableJSModules = [RCTAppleHealthKit sharedJsModule];
     [self.callableJSModules setBridge:self.bridge];
-      NSLog(@"%s", "name");
-      NSLog(@"%@", notification.name);
-     
-      NSLog(@"%s", "notificationName");
-      NSLog(@"%@", notification.userInfo);
-      [self sendEventWithName:@"healthKit:new" body:@{@"name": @"name"}];
-//    [self sendEventWithName:@"healthKit:new"
-//                   body:@"BloodGlucose"];
+    [self sendEventWithName:notification.name
+                   body:notification.userInfo];
   }
 }
 
-- (void)emitEventWithName:(NSString *)name body:(NSDictionary *)payload {
-    NSLog(@"%s", "j name");
-    NSLog(@"%@", name);
-//
-//    NSLog(@"%s", "payload");
-//    NSLog(@"%@", payload);
-//    NSDictionary* dict = @{@"name":payload};
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"healthKit:new"
+- (void)emitEventWithName:(NSString *)name body:(NSDictionary *)body {
+    [[NSNotificationCenter defaultCenter] postNotificationName:name
                                                     object:self
-                                                      userInfo:@{@"name": payload}];
-}
+                                                  userInfo:body];
 
 // Will be called when this module's last listener is removed, or on dealloc.
 -(void)stopObserving {
