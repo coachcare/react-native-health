@@ -31,7 +31,7 @@ RCTAppleHealthKit *shared;
 
 @implementation RCTAppleHealthKit
 
-bool hasListeners;
+static bool hasListeners;
 
 RCT_EXPORT_MODULE();
 
